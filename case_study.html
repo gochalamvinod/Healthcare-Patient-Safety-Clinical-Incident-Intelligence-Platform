@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clinical Case Study: Healthcare Patient Safety & Incident Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b1120;
+      --surface: #0f172a;
+      --card: #1e293b;
+      --border: #334155;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --primary: #0284c7;
+      --accent: #38bdf8;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 2rem 1rem;
+      margin: 0;
+    }
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    h1, h2, h3 {
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+    h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+    h2 { font-size: 1.35rem; margin-top: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; color: var(--accent); }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      margin-top: 1rem;
+    }
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: rgba(2, 132, 199, 0.2);
+      color: var(--accent);
+      border: 1px solid rgba(2, 132, 199, 0.4);
+    }
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      background: var(--surface);
+      padding: 0.2rem 0.4rem;
+      border-radius: 0.3rem;
+      font-size: 0.85em;
+    }
+    ul, ol { padding-left: 1.5rem; margin-top: 0.5rem; }
+    li { margin-bottom: 0.4rem; }
+    .btn {
+      display: inline-block;
+      background: var(--primary);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.875rem;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="/" class="btn">&larr; Back to Live Clinical Dashboard</a>
+    
+    <div style="margin-top: 1.5rem;">
+      <span class="badge">NABH & WHO Quality Compliance Case Study</span>
+      <h1 style="margin-top: 0.5rem;">Healthcare Patient Safety & Clinical Incident Intelligence Platform</h1>
+      <p style="color: var(--muted); font-size: 1.05rem;">
+        An AI-powered clinical risk governance system combining Deterministic Scikit-learn Machine Learning, Sublinear TF-IDF, Cosine Similarity RAG Precedent Search, and Google Gemini Generative AI for automated incident triage.
+      </p>
+    </div>
+
+    <h2>1. Executive Summary & Operational Challenge</h2>
+    <div class="card">
+      <p>
+        Multi-specialty hospital networks generate hundreds of clinical incident reports weekly—ranging from bedside falls and medication dosage errors to autoclave sterilization deviations and ventilator alarms.
+      </p>
+      <ul>
+        <li><strong>Manual Triage Bottlenecks:</strong> Unstructured narrative reports take 24–72 hours to classify manually.</li>
+        <li><strong>Subjective Severity Scoring:</strong> Varying departmental risk thresholds lead to under-reporting of high-consequence near-misses.</li>
+        <li><strong>Regulatory Exposure:</strong> Failure to document sentinel events breaches <strong>NABH (National Accreditation Board for Hospitals)</strong> 5th Edition standards and <strong>WHO Global Patient Safety Goals</strong>.</li>
+      </ul>
+    </div>
+
+    <h2>2. The 6-Phase Processing Pipeline</h2>
+    <div class="card">
+      <ol>
+        <li><strong>Phase 1: NLP Preprocessing & Hazard Lexicons:</strong> Whitespace normalization, medical de-elongation, domain clinical hazard lexicon injection across 6 vectors, and Sublinear TF-IDF (1,2) n-gram vectorization.</li>
+        <li><strong>Phase 2: Deterministic Machine Learning:</strong> Balanced Multiclass Logistic Regression (C=1.5) for Category classification and Lexicon-augmented Logistic Regression (C=2.0) for Severity tagging, augmented with deterministic safety guardrails.</li>
+        <li><strong>Phase 3: RAG Precedent Retrieval & Salience Summarizer:</strong> Cosine similarity over historical clinical incident embeddings retrieving Top-3 historical case precedents.</li>
+        <li><strong>Phase 4: Healthcare CAPA Engine:</strong> Standardized NABH/WHO Corrective and Preventive Actions mapping and Composite Operational Risk Score (0–100) computation.</li>
+        <li><strong>Phase 5: Google Gemini GenAI Synthesis:</strong> Dual Root Cause Analysis (Technical vs. Organizational), regulatory accreditation impact, and 2-sentence executive briefs.</li>
+        <li><strong>Phase 6: Enterprise REST Gateway & GUI:</strong> High-performance FastAPI endpoints serving an enterprise clinical intelligence dashboard.</li>
+      </ol>
+    </div>
+
+    <h2>3. Benchmark Incident Test Cases</h2>
+    <div class="card">
+      <ul>
+        <li><code>[H001]</code> <strong>Patient Safety (Medium):</strong> "Patient fall during bed-to-wheelchair transfer due to improper transfer assistance"</li>
+        <li><code>[H002]</code> <strong>Medication Safety (High):</strong> "Incorrect medication dosage administered: 10mg IV bolus given instead of 5mg order"</li>
+        <li><code>[H003]</code> <code>Infection Control (High):</code> "Suspected infection following sterilization deviation in surgical autoclave batch"</li>
+        <li><code>[H004]</code> <strong>Medical Equipment (Critical):</strong> "Ventilator malfunction during patient treatment with critical pressure sensor failure in ICU"</li>
+        <li><code>[H005]</code> <strong>Clinical Operations (Medium):</strong> "Delay in diagnostic laboratory result processing exceeding critical troponin turnaround time"</li>
+        <li><code>[H006]</code> <strong>Healthcare Compliance (Low):</strong> "Incomplete patient identification documentation observed during wristband verification"</li>
+      </ul>
+    </div>
+
+    <h2>4. Regulatory Frameworks</h2>
+    <div class="card">
+      <ul>
+        <li><strong>NABH 5th Edition:</strong> Care of Patients (COP.14), Management of Medication (MOM.5), Hospital Infection Control (HIC.3), Facility Management & Safety (FMS.4).</li>
+        <li><strong>WHO Global Patient Safety Action Plan 2021-2030:</strong> Goal 1 (Zero Harm in Care), Goal 3 (Medication Safety), Goal 6 (Fall Reduction).</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>

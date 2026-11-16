@@ -1,0 +1,37 @@
+incident_id,narrative,target_category,target_severity,department
+H001,Patient fall during bed-to-wheelchair transfer due to improper transfer assistance,Patient Safety,medium,Inpatient Ward
+H002,Incorrect medication dosage administered: 10mg IV bolus given instead of 5mg order,Medication Safety,high,Pharmacy & Dispensing
+H003,Suspected infection following sterilization deviation in surgical autoclave batch,Infection Control,high,Surgical Suite & OT
+H004,Ventilator malfunction during patient treatment with critical pressure sensor failure in ICU,Medical Equipment,critical,Intensive Care Unit (ICU)
+H005,Delay in diagnostic laboratory result processing exceeding critical troponin turnaround time,Clinical Operations,medium,Diagnostics & Pathology
+H006,Incomplete patient identification documentation observed during wristband verification,Healthcare Compliance,low,Emergency Department
+H007,"Elderly patient slipped on wet bathroom floor in general ward, sustained minor contusion",Patient Safety,medium,Inpatient Ward
+H008,"Unattended patient attempted unassisted ambulation from bed, resulting in fall with femoral fracture",Patient Safety,high,Inpatient Ward
+H009,"Patient slipped while getting out of bed due to lowered side rail, no acute trauma",Patient Safety,low,Inpatient Ward
+H010,Fall from examination gurney during patient transfer between radiology suite and recovery,Patient Safety,medium,Emergency Department
+H011,"Pediatric patient rolled off bed while parents were momentarily absent, sustained scalp hematoma",Patient Safety,high,Pediatrics
+H012,Insulin infusion administered at double the prescribed titration rate due to pump programming error,Medication Safety,high,Intensive Care Unit (ICU)
+H013,Antibiotic prescribed despite documented severe penicillin allergy in electronic health record,Medication Safety,critical,Pharmacy & Dispensing
+H014,"Near miss: Look-alike sound-alike medication selected in pharmacy automated dispenser, intercepted before administration",Medication Safety,medium,Pharmacy & Dispensing
+H015,Omission of scheduled evening anticoagulant dose leading to missed therapeutic prophylaxis,Medication Safety,medium,Inpatient Ward
+H016,Pediatric suspension dosage calculation error caught during pharmacy independent double-check,Medication Safety,low,Pharmacy & Dispensing
+H017,Central line bloodstream infection suspected following aseptic protocol breach during catheter insertion,Infection Control,high,Intensive Care Unit (ICU)
+H018,Post-operative surgical wound dehiscence with purulent discharge requiring emergency debridement,Infection Control,critical,Surgical Suite & OT
+H019,Hand hygiene non-compliance observed among clinical staff during wound dressing change,Infection Control,low,Inpatient Ward
+H020,Biohazard waste bin overflowing with discarded sharps and contaminated dressings in treatment room,Infection Control,medium,Emergency Department
+H021,Endoscope high-level disinfection log sheet missing chemical test strip verification results,Infection Control,medium,Diagnostics & Pathology
+H022,Defibrillator battery failed internal self-test during cardiac arrest resuscitation code blue,Medical Equipment,critical,Emergency Department
+H023,"Syringe infusion pump occlusion alarm failed to sound, resulting in delayed vasopressor delivery",Medical Equipment,high,Intensive Care Unit (ICU)
+H024,Multiparameter patient monitor screen flickered and lost ECG trace during post-anesthesia recovery,Medical Equipment,medium,Surgical Suite & OT
+H025,Pulse oximeter sensor cable damaged and giving erratic oxygen saturation readings,Medical Equipment,low,Inpatient Ward
+H026,Suction unit vacuum pressure insufficient during endotracheal intubation in trauma bay,Medical Equipment,high,Emergency Department
+H027,Severe delay in acute stroke CT scan reporting exceeding 60-minute door-to-needle guideline,Clinical Operations,critical,Diagnostics & Pathology
+H028,"Blood specimen hemolyzed due to improper phlebotomy vacuum tube handling, requiring redraw",Clinical Operations,low,Diagnostics & Pathology
+H029,Prolonged emergency department boarding time exceeding 8 hours due to inpatient bed shortage,Clinical Operations,medium,Emergency Department
+H030,Shift handover breakdown between attending nurses resulting in missed stat blood glucose check,Clinical Operations,medium,Inpatient Ward
+H031,Operating theater turnover delay of 90 minutes due to sterile instrument tray transport bottleneck,Clinical Operations,low,Surgical Suite & OT
+H032,Blood transfusion initiated without mandatory two-person independent patient bedside verification,Healthcare Compliance,high,Inpatient Ward
+H033,Surgical informed consent form missing patient signature prior to elective laparoscopic procedure,Healthcare Compliance,medium,Surgical Suite & OT
+H034,Narcotic schedule II count discrepancy discovered in emergency ward medication vault during audit,Healthcare Compliance,critical,Pharmacy & Dispensing
+H035,Patient discharge summary completed without mandatory clinical medication reconciliation sheet,Healthcare Compliance,low,Inpatient Ward
+H036,Biomedical waste manifest deviation noted during NABH compliance review of hazardous disposal,Healthcare Compliance,low,Clinical Operations

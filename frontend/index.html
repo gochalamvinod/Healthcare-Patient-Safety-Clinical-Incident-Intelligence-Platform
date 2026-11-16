@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Healthcare Patient Safety & Clinical Incident Intelligence Platform</title>
+  <meta name="description" content="Clinical Incident Intelligence & Deterministic ML Platform for Patient Safety, Clinical Triage, NABH/WHO Compliance, and CAPA Root-Cause Analysis.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    :root {
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    [data-theme="dark"] {
+      --bg-base: #0b1120;
+      --bg-surface: #0f172a;
+      --bg-card: #1e293b;
+      --bg-hover: #293548;
+      --border: #334155;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --primary: #0284c7;
+      --primary-hover: #0369a1;
+      --primary-glow: rgba(2, 132, 199, 0.25);
+      --accent: #0ea5e9;
+      --sev-crit-bg: rgba(239, 68, 68, 0.18);
+      --sev-crit-text: #f87171;
+      --sev-crit-border: rgba(239, 68, 68, 0.4);
+      --sev-high-bg: rgba(249, 115, 22, 0.18);
+      --sev-high-text: #fb923c;
+      --sev-high-border: rgba(249, 115, 22, 0.4);
+      --sev-med-bg: rgba(14, 165, 233, 0.18);
+      --sev-med-text: #38bdf8;
+      --sev-med-border: rgba(14, 165, 233, 0.4);
+      --sev-low-bg: rgba(16, 185, 129, 0.18);
+      --sev-low-text: #34d399;
+      --sev-low-border: rgba(16, 185, 129, 0.4);
+    }
+    [data-theme="light"] {
+      --bg-base: #f8fafc;
+      --bg-surface: #ffffff;
+      --bg-card: #ffffff;
+      --bg-hover: #f1f5f9;
+      --border: #e2e8f0;
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --text-dim: #64748b;
+      --primary: #0284c7;
+      --primary-hover: #0369a1;
+      --primary-glow: rgba(2, 132, 199, 0.15);
+      --accent: #0284c7;
+      --sev-crit-bg: #fee2e2;
+      --sev-crit-text: #b91c1c;
+      --sev-crit-border: #fca5a5;
+      --sev-high-bg: #ffedd5;
+      --sev-high-text: #c2410c;
+      --sev-high-border: #fdba74;
+      --sev-med-bg: #e0f2fe;
+      --sev-med-text: #0369a1;
+      --sev-med-border: #7dd3fc;
+      --sev-low-bg: #d1fae5;
+      --sev-low-text: #047857;
+      --sev-low-border: #6ee7b7;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .container {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      width: 100%;
+    }
+    header {
+      background-color: var(--bg-surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 4.25rem;
+    }
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .logo-icon {
+      width: 2.25rem;
+      height: 2.25rem;
+      background: linear-gradient(135deg, #0284c7 0%, #0ea5e9 100%);
+      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 1.15rem;
+      box-shadow: 0 2px 8px var(--primary-glow);
+    }
+    .logo-title {
+      font-size: 1.125rem;
+      font-weight: 700;
+      letter-spacing: -0.025em;
+    }
+    .logo-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      padding: 0.25rem 0.65rem;
+      background-color: var(--bg-hover);
+      border: 1px solid var(--border);
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+    .status-dot {
+      width: 0.5rem;
+      height: 0.5rem;
+      background-color: #10b981;
+      border-radius: 9999px;
+      box-shadow: 0 0 8px #10b981;
+    }
+    .nav-tabs {
+      display: flex;
+      gap: 0.5rem;
+      border-bottom: 1px solid var(--border);
+      background-color: var(--bg-surface);
+      overflow-x: auto;
+      padding: 0 1.5rem;
+    }
+    .nav-tab {
+      padding: 0.75rem 1rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: var(--transition);
+      background: none;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+    }
+    .nav-tab:hover {
+      color: var(--text-main);
+    }
+    .nav-tab.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+    main {
+      flex: 1;
+      padding: 1.75rem 0;
+    }
+    .card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      transition: var(--transition);
+    }
+    .card:hover {
+      border-color: rgba(2, 132, 199, 0.4);
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.25rem;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.25rem;
+    }
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1.25rem;
+    }
+    @media (max-width: 1024px) {
+      .grid-3, .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 640px) {
+      .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.625rem 1.25rem;
+      border-radius: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      border: 1px solid transparent;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+      color: white;
+      box-shadow: 0 2px 8px var(--primary-glow);
+    }
+    .btn-primary:hover {
+      background: #0369a1;
+      transform: translateY(-1px);
+    }
+    .btn-outline {
+      background-color: transparent;
+      border-color: var(--border);
+      color: var(--text-main);
+    }
+    .btn-outline:hover {
+      background-color: var(--bg-hover);
+    }
+    .btn-sm {
+      padding: 0.35rem 0.65rem;
+      font-size: 0.75rem;
+    }
+    .input-field, .select-field, textarea {
+      width: 100%;
+      padding: 0.65rem 0.85rem;
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 0.875rem;
+      transition: var(--transition);
+    }
+    .input-field:focus, .select-field:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px var(--primary-glow);
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .badge-critical { background-color: var(--sev-crit-bg); color: var(--sev-crit-text); border: 1px solid var(--sev-crit-border); }
+    .badge-high { background-color: var(--sev-high-bg); color: var(--sev-high-text); border: 1px solid var(--sev-high-border); }
+    .badge-medium { background-color: var(--sev-med-bg); color: var(--sev-med-text); border: 1px solid var(--sev-med-border); }
+    .badge-low { background-color: var(--sev-low-bg); color: var(--sev-low-text); border: 1px solid var(--sev-low-border); }
+    .badge-category { background-color: rgba(2, 132, 199, 0.18); color: #38bdf8; border: 1px solid rgba(2, 132, 199, 0.35); }
+    .badge-dept { background-color: var(--bg-hover); color: var(--text-muted); border: 1px solid var(--border); }
+    
+    .table-container {
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      background-color: var(--bg-surface);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.875rem;
+    }
+    th {
+      background-color: var(--bg-card);
+      padding: 0.75rem 1rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    td {
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    tr:last-child td {
+      border-bottom: none;
+    }
+    tr:hover td {
+      background-color: var(--bg-hover);
+    }
+    .stat-val {
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1;
+      margin-top: 0.35rem;
+      color: var(--text-main);
+    }
+    .stat-label {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .progress-bar {
+      height: 0.5rem;
+      background-color: var(--bg-hover);
+      border-radius: 9999px;
+      overflow: hidden;
+      margin-top: 0.5rem;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #0284c7, #38bdf8);
+      border-radius: 9999px;
+    }
+    .tag-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 0.5rem;
+    }
+    .hazard-tag {
+      background-color: rgba(2, 132, 199, 0.12);
+      color: #38bdf8;
+      border: 1px solid rgba(2, 132, 199, 0.25);
+      border-radius: 0.375rem;
+      padding: 0.2rem 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+    .banner-correction {
+      background-color: rgba(14, 165, 233, 0.1);
+      border: 1px solid rgba(14, 165, 233, 0.3);
+      border-radius: 0.5rem;
+      padding: 0.75rem 1rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.875rem;
+    }
+    .gauge-circle {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      font-weight: 700;
+      background: radial-gradient(circle closest-side, var(--bg-card) 75%, transparent 80%),
+                  conic-gradient(#ef4444 var(--percent), var(--bg-hover) 0);
+      color: var(--text-main);
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    const CLINICAL_PRESETS = [
+      {
+        id: "H001",
+        label: "Bed-to-Wheelchair Fall",
+        dept: "Inpatient Ward",
+        text: "Patient experienced a fall while being transferred from the hospital bed to a wheelchair due to improper transfer assistance."
+      },
+      {
+        id: "H002",
+        label: "Medication Dosage Deviation",
+        dept: "Pharmacy & Dispensing",
+        text: "Incorrect medication dosage administered: 10mg IV bolus given instead of 5mg order."
+      },
+      {
+        id: "H003",
+        label: "Autoclave Sterilization Breach",
+        dept: "Surgical Suite & OT",
+        text: "Suspected surgical site infection following sterilization indicator deviation in autoclave batch."
+      },
+      {
+        id: "H004",
+        label: "ICU Ventilator Sensor Failure",
+        dept: "Intensive Care Unit (ICU)",
+        text: "Ventilator malfunction during patient treatment with critical pressure sensor failure in ICU."
+      },
+      {
+        id: "H005",
+        label: "Lab Troponin TAT Delay",
+        dept: "Diagnostics & Pathology",
+        text: "Delay in diagnostic laboratory result processing exceeding critical troponin turnaround time."
+      },
+      {
+        id: "H006",
+        label: "Blood Transfusion ID Deviation",
+        dept: "Emergency Department",
+        text: "Incomplete patient identification documentation observed during wristband verification prior to transfusion."
+      },
+      {
+        id: "H007",
+        label: "Typo Normalization Stress Test",
+        dept: "Inpatient Ward",
+        text: "Patient faaalll during transfr to whelchair in ward, nurse notifeyed immediately."
+      }
+    ];
+
+    const DEPARTMENTS = [
+      "Inpatient Ward",
+      "Intensive Care Unit (ICU)",
+      "Pharmacy & Dispensing",
+      "Surgical Suite & OT",
+      "Emergency Department",
+      "Diagnostics & Pathology",
+      "Pediatrics",
+      "Cardiology & Cath Lab"
+    ];
+
+    function App() {
+      const [theme, setTheme] = useState("dark");
+      const [activeTab, setActiveTab] = useState("classifier");
+      const [narrative, setNarrative] = useState(CLINICAL_PRESETS[0].text);
+      const [department, setDepartment] = useState(CLINICAL_PRESETS[0].dept);
+      const [applyCorrections, setApplyCorrections] = useState(true);
+      const [classifying, setClassifying] = useState(false);
+      const [result, setResult] = useState(null);
+      
+      const [incidents, setIncidents] = useState([]);
+      const [analytics, setAnalytics] = useState(null);
+      const [clusters, setClusters] = useState([]);
+      const [metrics, setMetrics] = useState(null);
+      const [filterCategory, setFilterCategory] = useState("");
+      const [filterSeverity, setFilterSeverity] = useState("");
+      const [searchTerm, setSearchTerm] = useState("");
+      const [capaChecked, setCapaChecked] = useState({});
+
+      useEffect(() => {
+        document.documentElement.setAttribute("data-theme", theme);
+      }, [theme]);
+
+      const toggleTheme = () => setTheme(prev => prev === "dark" ? "light" : "dark");
+
+      const fetchDashboardData = async () => {
+        try {
+          const [anRes, incRes, clRes, meRes] = await Promise.all([
+            fetch("/api/analytics").then(r => r.json()),
+            fetch("/api/incidents").then(r => r.json()),
+            fetch("/api/clusters").then(r => r.json()),
+            fetch("/api/metrics").then(r => r.json())
+          ]);
+          setAnalytics(anRes);
+          setIncidents(incRes.incidents || []);
+          setClusters(clRes.clusters || []);
+          setMetrics(meRes);
+        } catch (err) {
+          console.warn("API load warning:", err);
+        }
+      };
+
+      useEffect(() => {
+        fetchDashboardData();
+        handleRunAnalysis();
+      }, []);
+
+      const handleRunAnalysis = async (overrideCorrections) => {
+        if (!narrative || !narrative.trim()) return;
+        const useCorrections = typeof overrideCorrections === "boolean" ? overrideCorrections : applyCorrections;
+        if (typeof overrideCorrections === "boolean") {
+          setApplyCorrections(overrideCorrections);
+        }
+        setClassifying(true);
+        try {
+          const res = await fetch("/api/classify", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              narrative: narrative.trim(),
+              department: department,
+              apply_corrections: useCorrections
+            })
+          });
+          if (res.ok) {
+            const data = await res.json();
+            setResult(data);
+            setCapaChecked({});
+            fetchDashboardData();
+          }
+        } catch (err) {
+          console.error("Classification failed:", err);
+        } finally {
+          setClassifying(false);
+        }
+      };
+
+      const handleCapaToggle = (idx) => {
+        setCapaChecked(prev => ({ ...prev, [idx]: !prev[idx] }));
+      };
+
+      const getSeverityBadgeClass = (sev) => {
+        const s = String(sev || "low").toLowerCase();
+        if (s === "critical") return "badge badge-critical";
+        if (s === "high") return "badge badge-high";
+        if (s === "medium") return "badge badge-medium";
+        return "badge badge-low";
+      };
+
+      return (
+        <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+          {/* Header */}
+          <header>
+            <div className="container header-content">
+              <div className="logo-area">
+                <div className="logo-icon">+</div>
+                <div>
+                  <div className="logo-title">Healthcare Patient Safety Intelligence</div>
+                  <div className="logo-sub">Clinical Incident Triage &bull; CAPA &bull; NABH & WHO Compliance</div>
+                </div>
+              </div>
+              <div className="header-actions">
+                <div className="status-badge">
+                  <span className="status-dot"></span>
+                  <span>Clinical ML Engine Operational &bull; Quality Verified</span>
+                </div>
+
+                <button onClick={toggleTheme} className="btn btn-outline btn-sm">
+                  {theme === "dark" ? "☀️ Light" : "🌙 Dark"}
+                </button>
+              </div>
+            </div>
+            {/* Tabs */}
+            <div className="nav-tabs">
+              <button
+                className={`nav-tab ${activeTab === 'classifier' ? 'active' : ''}`}
+                onClick={() => setActiveTab('classifier')}
+              >
+                Clinical Incident Analyzer
+              </button>
+              <button
+                className={`nav-tab ${activeTab === 'explorer' ? 'active' : ''}`}
+                onClick={() => setActiveTab('explorer')}
+              >
+                Patient Safety Incident Register
+              </button>
+              <button
+                className={`nav-tab ${activeTab === 'clusters' ? 'active' : ''}`}
+                onClick={() => setActiveTab('clusters')}
+              >
+                Clinical Risk Clusters
+              </button>
+              <button
+                className={`nav-tab ${activeTab === 'governance' ? 'active' : ''}`}
+                onClick={() => setActiveTab('governance')}
+              >
+                Healthcare Quality Metrics
+              </button>
+              <button
+                className={`nav-tab ${activeTab === 'overview' ? 'active' : ''}`}
+                onClick={() => setActiveTab('overview')}
+              >
+                Executive Overview
+              </button>
+            </div>
+          </header>
+
+          <main className="container">
+            {/* TAB 1: CLINICAL INCIDENT ANALYZER */}
+            {activeTab === 'classifier' && (
+              <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+                {/* Input Studio Card */}
+                <div className="card">
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
+                    <div>
+                      <h2 style={{ fontSize: "1.25rem", fontWeight: 700 }}>Clinical Incident Triage Console</h2>
+                      <p style={{ fontSize: "0.875rem", color: "var(--text-muted)" }}>
+                        Enter an unstructured clinical incident report to execute automated triage, dual-model ML classification, and NABH/WHO compliance analysis.
+                      </p>
+                    </div>
+                    <span className="badge badge-category">7-Stage End-to-End Pipeline</span>
+                  </div>
+
+                  {/* Clinical Presets */}
+                  <div style={{ marginBottom: "1rem" }}>
+                    <div style={{ fontSize: "0.75rem", fontWeight: 600, color: "var(--text-muted)", marginBottom: "0.5rem", textTransform: "uppercase" }}>
+                      Benchmark Case Study Presets:
+                    </div>
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+                      {CLINICAL_PRESETS.map(p => (
+                        <button
+                          key={p.id}
+                          className="btn btn-outline btn-sm"
+                          onClick={() => {
+                            setNarrative(p.text);
+                            setDepartment(p.dept);
+                          }}
+                        >
+                          <span style={{ fontWeight: 700, color: "var(--primary)" }}>[{p.id}]</span> {p.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Form */}
+                  <div className="grid-2" style={{ marginBottom: "1rem" }}>
+                    <div>
+                      <label style={{ display: "block", fontSize: "0.8125rem", fontWeight: 600, marginBottom: "0.35rem" }}>
+                        Reporting Department / Hospital Ward
+                      </label>
+                      <select
+                        className="select-field"
+                        value={department}
+                        onChange={e => setDepartment(e.target.value)}
+                      >
+                        {DEPARTMENTS.map(d => <option key={d} value={d}>{d}</option>)}
+                      </select>
+                    </div>
+                    <div style={{ display: "flex", alignItems: "flex-end" }}>
+                      <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "0.875rem", cursor: "pointer", paddingBottom: "0.5rem" }}>
+                        <input
+                          type="checkbox"
+                          checked={applyCorrections}
+                          onChange={e => setApplyCorrections(e.target.checked)}
+                          style={{ width: "1.1rem", height: "1.1rem" }}
+                        />
+                        <span>Enable Clinical Linguistic Normalization (Typo & Medical Spelling Guardrail)</span>
+                      </label>
+                    </div>
+                  </div>
+
+                  <div style={{ marginBottom: "1.25rem" }}>
+                    <label style={{ display: "block", fontSize: "0.8125rem", fontWeight: 600, marginBottom: "0.35rem" }}>
+                      Unstructured Clinical Incident Narrative
+                    </label>
+                    <textarea
+                      rows={3}
+                      value={narrative}
+                      onChange={e => setNarrative(e.target.value)}
+                      placeholder="Describe the incident (e.g. Patient fall during transfer, medication dosage discrepancy, sterilization deviation, medical equipment alarm failure)..."
+                    />
+                  </div>
+
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <div style={{ fontSize: "0.75rem", color: "var(--text-dim)", fontFamily: "var(--font-mono)" }}>
+                      Sublinear TF-IDF &bull; Balanced Logistic Regression &bull; Cosine Similarity &bull; Gemini 3.1 Flash Lite
+                    </div>
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => handleRunAnalysis()}
+                      disabled={classifying}
+                    >
+                      {classifying ? "Executing Clinical Triage Pipeline..." : "Triage Incident & Generate NABH CAPA Dossier"}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Analysis Results View */}
+                {result && (
+                  <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+                    {/* STAGE 1 & 2: Linguistic Intelligence & User Interactive Control */}
+                    {result.spelling_review && result.spelling_review.has_corrections && (
+                      <div className="card" style={{ border: "1px solid var(--primary)", backgroundColor: "var(--bg-surface)", padding: "1.25rem", borderRadius: "0.5rem" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem", flexWrap: "wrap", gap: "0.5rem" }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                            <span style={{ fontSize: "1.1rem" }}>🔍</span>
+                            <span style={{ fontWeight: 700, fontSize: "0.95rem" }}>
+                              STAGE 1 & 2: Linguistic Intelligence & User Interactive Control
+                            </span>
+                          </div>
+                          <span className="badge badge-low" style={{ textTransform: "none" }}>
+                            Engine: {result.spelling_review.model_used || "Clinical Linguistic Intelligence"}
+                          </span>
+                        </div>
+
+                        {/* Detected Typo Tokens */}
+                        <div style={{ marginBottom: "1rem" }}>
+                          <span style={{ fontSize: "0.75rem", fontWeight: 600, color: "var(--text-muted)", textTransform: "uppercase" }}>
+                            Detected Clinical Linguistic Typo Tokens:
+                          </span>
+                          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem", marginTop: "0.35rem" }}>
+                            {result.spelling_review.typo_corrections && result.spelling_review.typo_corrections.length > 0 ? (
+                              result.spelling_review.typo_corrections.map((tc, idx) => (
+                                <span key={idx} style={{ fontSize: "0.75rem", padding: "0.2rem 0.5rem", borderRadius: "0.25rem", backgroundColor: "rgba(2, 132, 199, 0.15)", color: "var(--accent)", border: "1px solid rgba(2, 132, 199, 0.3)", fontFamily: "var(--font-mono)" }}>
+                                  {tc}
+                                </span>
+                              ))
+                            ) : (
+                              <span style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>Token normalization applied</span>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Interactive Decision Branches (Diamond Decision) */}
+                        <div style={{ fontSize: "0.8125rem", fontWeight: 600, color: "var(--text-muted)", marginBottom: "0.5rem", textTransform: "uppercase" }}>
+                          Select Operational Evaluation Branch:
+                        </div>
+                        <div className="grid-2" style={{ gap: "0.75rem" }}>
+                          {/* Branch A: Standardized Clinical Text */}
+                          <div
+                            onClick={() => handleRunAnalysis(true)}
+                            style={{
+                              padding: "0.85rem",
+                              borderRadius: "0.5rem",
+                              cursor: "pointer",
+                              border: applyCorrections ? "2px solid var(--primary)" : "1px solid var(--border)",
+                              backgroundColor: applyCorrections ? "rgba(2, 132, 199, 0.08)" : "var(--bg-card)",
+                              transition: "all 0.15s ease"
+                            }}
+                          >
+                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.35rem" }}>
+                              <span style={{ fontWeight: 700, fontSize: "0.875rem", color: applyCorrections ? "var(--primary)" : "var(--text-main)" }}>
+                                {applyCorrections ? "✓ " : ""}Standardized Clinical Narrative
+                              </span>
+                              <span className="badge" style={{ fontSize: "0.65rem", backgroundColor: applyCorrections ? "var(--primary)" : "transparent", color: applyCorrections ? "#fff" : "var(--text-muted)", border: "1px solid var(--border)" }}>
+                                {applyCorrections ? "Active Pipeline Input" : "Click to Evaluate"}
+                              </span>
+                            </div>
+                            <p style={{ fontSize: "0.8125rem", color: "var(--text-main)", margin: 0, fontStyle: "italic" }}>
+                              &ldquo;{result.spelling_review.corrected_narrative}&rdquo;
+                            </p>
+                          </div>
+
+                          {/* Branch B: Original Raw Staff Input */}
+                          <div
+                            onClick={() => handleRunAnalysis(false)}
+                            style={{
+                              padding: "0.85rem",
+                              borderRadius: "0.5rem",
+                              cursor: "pointer",
+                              border: !applyCorrections ? "2px solid #f59e0b" : "1px solid var(--border)",
+                              backgroundColor: !applyCorrections ? "rgba(245, 158, 11, 0.08)" : "var(--bg-card)",
+                              transition: "all 0.15s ease"
+                            }}
+                          >
+                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.35rem" }}>
+                              <span style={{ fontWeight: 700, fontSize: "0.875rem", color: !applyCorrections ? "#f59e0b" : "var(--text-main)" }}>
+                                {!applyCorrections ? "✓ " : ""}Original Raw Staff Narrative
+                              </span>
+                              <span className="badge" style={{ fontSize: "0.65rem", backgroundColor: !applyCorrections ? "#f59e0b" : "transparent", color: !applyCorrections ? "#000" : "var(--text-muted)", border: "1px solid var(--border)" }}>
+                                {!applyCorrections ? "Active Pipeline Input" : "Click to Evaluate"}
+                              </span>
+                            </div>
+                            <p style={{ fontSize: "0.8125rem", color: "var(--text-main)", margin: 0, fontStyle: "italic" }}>
+                              &ldquo;{result.spelling_review.original_narrative}&rdquo;
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Primary Classification Triage Banner */}
+                    <div className="card" style={{ borderLeft: "4px solid var(--primary)" }}>
+                      <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", gap: "1rem" }}>
+                        <div>
+                          <div style={{ fontSize: "0.75rem", fontWeight: 600, color: "var(--text-muted)", textTransform: "uppercase" }}>
+                            Deterministic ML Classification
+                          </div>
+                          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginTop: "0.35rem" }}>
+                            <span style={{ fontSize: "1.5rem", fontWeight: 700 }}>
+                              {result.prediction.category}
+                            </span>
+                            <span className={getSeverityBadgeClass(result.prediction.severity)}>
+                              {result.prediction.severity.toUpperCase()} SEVERITY
+                            </span>
+                            <span className="badge badge-dept">{department}</span>
+                          </div>
+                          <div style={{ fontSize: "0.8125rem", color: "var(--text-muted)", marginTop: "0.25rem" }}>
+                            Category Confidence: <strong>{(result.prediction.category_confidence * 100).toFixed(1)}%</strong> &bull; Severity Confidence: <strong>{(result.prediction.severity_confidence * 100).toFixed(1)}%</strong>
+                          </div>
+                        </div>
+
+                        {/* Operational Risk Gauge */}
+                        <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+                          <div style={{ textAlign: "right" }}>
+                            <div style={{ fontSize: "0.75rem", color: "var(--text-muted)", fontWeight: 600, textTransform: "uppercase" }}>
+                              Composite Risk Score
+                            </div>
+                            <div style={{ fontSize: "0.8125rem", color: "var(--text-dim)" }}>
+                              Scale 0 (Minimal) to 100 (Critical)
+                            </div>
+                          </div>
+                          <div
+                            className="gauge-circle"
+                            style={{ "--percent": `${result.prediction.composite_risk_score}%` }}
+                          >
+                            {result.prediction.composite_risk_score}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Detected Hazards & Extractive Summary */}
+                      <div style={{ marginTop: "1.25rem", paddingTop: "1rem", borderTop: "1px solid var(--border)" }}>
+                        <div style={{ fontSize: "0.8125rem", fontWeight: 600, color: "var(--text-muted)" }}>
+                          Extractive NLP Salience Summary:
+                        </div>
+                        <div style={{ fontSize: "0.9375rem", marginTop: "0.25rem", fontStyle: "italic", color: "var(--text-main)" }}>
+                          &ldquo;{result.nlp_insights.extractive_summary}&rdquo;
+                        </div>
+
+                        <div style={{ marginTop: "0.75rem" }}>
+                          <span style={{ fontSize: "0.75rem", fontWeight: 600, color: "var(--text-muted)", marginRight: "0.5rem" }}>
+                            Detected Clinical Hazard Vectors:
+                          </span>
+                          <div className="tag-cloud" style={{ display: "inline-flex" }}>
+                            {result.nlp_insights.detected_hazards.map((h, i) => (
+                              <span key={i} className="hazard-tag">{h}</span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Clinical Root-Cause Diagnostics & Leadership Synthesis */}
+                    {result.gemini_insights && (
+                      <div className="card" style={{ background: "linear-gradient(180deg, var(--bg-card) 0%, rgba(2, 132, 199, 0.05) 100%)" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem" }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                            <span style={{ fontSize: "1.1rem" }}>📋</span>
+                            <h3 style={{ fontSize: "1.1rem", fontWeight: 700 }}>Clinical Root-Cause Diagnostics & Leadership Synthesis</h3>
+                          </div>
+                          <span className="badge badge-category">{result.gemini_insights.model_used || "gemini-3.1-flash-lite"}</span>
+                        </div>
+
+                        <div style={{ backgroundColor: "var(--bg-surface)", padding: "1rem", borderRadius: "0.5rem", marginBottom: "1rem", border: "1px solid var(--border)" }}>
+                          <div style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--primary)", textTransform: "uppercase", marginBottom: "0.25rem" }}>
+                            Clinical Leadership Synthesis
+                          </div>
+                          <p style={{ fontSize: "0.9375rem", lineHeight: 1.6 }}>
+                            {result.gemini_insights.ai_executive_summary}
+                          </p>
+                        </div>
+
+                        <div className="grid-2" style={{ marginBottom: "1rem" }}>
+                          <div style={{ backgroundColor: "var(--bg-surface)", padding: "0.85rem", borderRadius: "0.5rem", border: "1px solid var(--border)" }}>
+                            <div style={{ fontSize: "0.75rem", fontWeight: 700, color: "#f87171", textTransform: "uppercase", marginBottom: "0.25rem" }}>
+                              Technical / Physical Root Cause
+                            </div>
+                            <p style={{ fontSize: "0.875rem" }}>
+                              {result.gemini_insights.technical_root_cause || (result.gemini_insights.root_cause_analysis ? result.gemini_insights.root_cause_analysis.split("|")[0] : "Procedure / mechanical deviation.")}
+                            </p>
+                          </div>
+                          <div style={{ backgroundColor: "var(--bg-surface)", padding: "0.85rem", borderRadius: "0.5rem", border: "1px solid var(--border)" }}>
+                            <div style={{ fontSize: "0.75rem", fontWeight: 700, color: "#fb923c", textTransform: "uppercase", marginBottom: "0.25rem" }}>
+                              Organizational / Systemic Root Cause
+                            </div>
+                            <p style={{ fontSize: "0.875rem" }}>
+                              {result.gemini_insights.organizational_root_cause || (result.gemini_insights.root_cause_analysis && result.gemini_insights.root_cause_analysis.split("|")[1] ? result.gemini_insights.root_cause_analysis.split("|")[1] : "Supervision and staffing protocol gap.")}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div style={{ backgroundColor: "var(--bg-surface)", padding: "0.85rem", borderRadius: "0.5rem", border: "1px solid var(--border)" }}>
+                          <div style={{ fontSize: "0.75rem", fontWeight: 700, color: "#38bdf8", textTransform: "uppercase", marginBottom: "0.25rem" }}>
+                            NABH Accreditation & WHO Patient Safety Regulatory Mapping
+                          </div>
+                          <p style={{ fontSize: "0.875rem", color: "var(--text-muted)" }}>
+                            {result.gemini_insights.nabh_who_impact || "Complies with NABH 5th Edition Patient Safety & Quality Improvement Standards."}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* CAPA Action Plan & Precedents Grid */}
+                    <div className="grid-2">
+                      {/* Healthcare CAPA Checklist */}
+                      <div className="card">
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
+                          <h3 style={{ fontSize: "1.05rem", fontWeight: 700 }}>Healthcare CAPA Checklist</h3>
+                          <span className="badge badge-low">NABH Protocol</span>
+                        </div>
+                        <div style={{ display: "flex", flexDirection: "column", gap: "0.65rem" }}>
+                          {result.recommended_preventive_actions.map((act, idx) => (
+                            <label
+                              key={idx}
+                              style={{
+                                display: "flex",
+                                alignItems: "flex-start",
+                                gap: "0.65rem",
+                                padding: "0.65rem",
+                                borderRadius: "0.5rem",
+                                backgroundColor: capaChecked[idx] ? "rgba(16, 185, 129, 0.1)" : "var(--bg-surface)",
+                                border: "1px solid",
+                                borderColor: capaChecked[idx] ? "rgba(16, 185, 129, 0.3)" : "var(--border)",
+                                cursor: "pointer",
+                                transition: "all 0.15s ease"
+                              }}
+                            >
+                              <input
+                                type="checkbox"
+                                checked={!!capaChecked[idx]}
+                                onChange={() => handleCapaToggle(idx)}
+                                style={{ marginTop: "0.2rem", width: "1.05rem", height: "1.05rem" }}
+                              />
+                              <span style={{ fontSize: "0.85rem", textDecoration: capaChecked[idx] ? "line-through" : "none", color: capaChecked[idx] ? "var(--text-muted)" : "var(--text-main)" }}>
+                                {act}
+                              </span>
+                            </label>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Historical Precedent Retrieval (RAG) */}
+                      <div className="card">
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
+                          <h3 style={{ fontSize: "1.05rem", fontWeight: 700 }}>Cosine Similarity Historical Precedents (RAG)</h3>
+                          <span className="badge badge-category">Top-3 Matches</span>
+                        </div>
+                        <div style={{ display: "flex", flexDirection: "column", gap: "0.65rem" }}>
+                          {result.retrieval_evidence.map((p, idx) => (
+                            <div
+                              key={idx}
+                              style={{
+                                padding: "0.75rem",
+                                borderRadius: "0.5rem",
+                                backgroundColor: "var(--bg-surface)",
+                                border: "1px solid var(--border)"
+                              }}
+                            >
+                              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.3rem" }}>
+                                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                                  <span style={{ fontWeight: 700, fontSize: "0.8125rem", color: "var(--primary)" }}>{p.incident_id}</span>
+                                  <span className={getSeverityBadgeClass(p.severity)} style={{ fontSize: "0.65rem", padding: "0.1rem 0.4rem" }}>
+                                    {p.severity}
+                                  </span>
+                                  <span style={{ fontSize: "0.75rem", color: "var(--text-dim)" }}>{p.department}</span>
+                                </div>
+                                <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.75rem", fontWeight: 700, color: "#10b981" }}>
+                                  {(p.similarity * 100).toFixed(1)}% Sim
+                                </span>
+                              </div>
+                              <p style={{ fontSize: "0.8125rem", color: "var(--text-muted)" }}>
+                                {p.narrative}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* TAB 2: PATIENT SAFETY INCIDENT REGISTER */}
+            {activeTab === 'explorer' && (
+              <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+                <div className="card">
+                  <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", gap: "1rem", marginBottom: "1.25rem" }}>
+                    <div>
+                      <h2 style={{ fontSize: "1.25rem", fontWeight: 700 }}>Patient Safety Incident Register</h2>
+                      <p style={{ fontSize: "0.875rem", color: "var(--text-muted)" }}>
+                        Comprehensive audit ledger of institutional clinical safety reports, categories, and severities.
+                      </p>
+                    </div>
+                    <div style={{ fontSize: "0.875rem", color: "var(--text-muted)" }}>
+                      Total Records: <strong>{incidents.length}</strong>
+                    </div>
+                  </div>
+
+                  {/* Filters */}
+                  <div className="grid-3" style={{ marginBottom: "1rem" }}>
+                    <input
+                      type="text"
+                      className="input-field"
+                      placeholder="Search incident text..."
+                      value={searchTerm}
+                      onChange={e => setSearchTerm(e.target.value)}
+                    />
+                    <select
+                      className="select-field"
+                      value={filterCategory}
+                      onChange={e => setFilterCategory(e.target.value)}
+                    >
+                      <option value="">All Categories</option>
+                      <option value="Patient Safety">Patient Safety</option>
+                      <option value="Medication Safety">Medication Safety</option>
+                      <option value="Infection Control">Infection Control</option>
+                      <option value="Medical Equipment">Medical Equipment</option>
+                      <option value="Clinical Operations">Clinical Operations</option>
+                      <option value="Healthcare Compliance">Healthcare Compliance</option>
+                    </select>
+                    <select
+                      className="select-field"
+                      value={filterSeverity}
+                      onChange={e => setFilterSeverity(e.target.value)}
+                    >
+                      <option value="">All Severities</option>
+                      <option value="critical">Critical</option>
+                      <option value="high">High</option>
+                      <option value="medium">Medium</option>
+                      <option value="low">Low</option>
+                    </select>
+                  </div>
+
+                  {/* Table */}
+                  <div className="table-container">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>ID</th>
+                          <th>Incident Description</th>
+                          <th>Category</th>
+                          <th>Severity</th>
+                          <th>Department</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {incidents
+                          .filter(i => !filterCategory || i.target_category.toLowerCase() === filterCategory.toLowerCase())
+                          .filter(i => !filterSeverity || i.target_severity.toLowerCase() === filterSeverity.toLowerCase())
+                          .filter(i => !searchTerm || i.narrative.toLowerCase().includes(searchTerm.toLowerCase()))
+                          .map((inc, idx) => (
+                            <tr key={idx}>
+                              <td style={{ fontFamily: "var(--font-mono)", fontWeight: 700, color: "var(--primary)" }}>{inc.incident_id}</td>
+                              <td style={{ maxWidth: "420px" }}>{inc.narrative}</td>
+                              <td><span className="badge badge-category">{inc.target_category}</span></td>
+                              <td><span className={getSeverityBadgeClass(inc.target_severity)}>{inc.target_severity}</span></td>
+                              <td><span className="badge badge-dept">{inc.department || "Inpatient"}</span></td>
+                              <td>
+                                <button
+                                  className="btn btn-outline btn-sm"
+                                  onClick={() => {
+                                    setNarrative(inc.narrative);
+                                    setDepartment(inc.department || "Inpatient Ward");
+                                    setActiveTab('classifier');
+                                  }}
+                                >
+                                  Triage &rarr;
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* TAB 3: CLINICAL RISK CLUSTERS */}
+            {activeTab === 'clusters' && (
+              <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+                <div className="card">
+                  <h2 style={{ fontSize: "1.25rem", fontWeight: 700, marginBottom: "0.35rem" }}>
+                    Clinical Risk Clusters (Unsupervised K-Means)
+                  </h2>
+                  <p style={{ fontSize: "0.875rem", color: "var(--text-muted)", marginBottom: "1.5rem" }}>
+                    Unsupervised natural language clustering groups recurring patient safety incident narratives into systemic hospital risk patterns.
+                  </p>
+
+                  <div className="grid-2">
+                    {clusters.map((c, idx) => (
+                      <div
+                        key={idx}
+                        className="card"
+                        style={{ backgroundColor: "var(--bg-surface)", borderLeft: "4px solid var(--primary)" }}
+                      >
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "0.75rem" }}>
+                          <div>
+                            <span style={{ fontSize: "0.75rem", fontFamily: "var(--font-mono)", color: "var(--primary)", fontWeight: 700 }}>
+                              CLUSTER #{c.cluster_id + 1}
+                            </span>
+                            <h3 style={{ fontSize: "1.1rem", fontWeight: 700, marginTop: "0.15rem" }}>
+                              {c.cluster_name}
+                            </h3>
+                          </div>
+                          <span className="badge badge-category">{c.count} Incidents</span>
+                        </div>
+
+                        <div style={{ fontSize: "0.8125rem", color: "var(--text-muted)", marginBottom: "0.75rem" }}>
+                          Primary Focus: <strong>{c.category}</strong>
+                        </div>
+
+                        <div>
+                          <span style={{ fontSize: "0.75rem", fontWeight: 600, color: "var(--text-muted)" }}>
+                            Top Clinical Semantic Keywords:
+                          </span>
+                          <div className="tag-cloud">
+                            {c.top_keywords.map((kw, kidx) => (
+                              <span key={kidx} className="hazard-tag">{kw}</span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* TAB 4: HEALTHCARE QUALITY METRICS */}
+            {activeTab === 'governance' && (
+              <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+                <div className="card">
+                  <h2 style={{ fontSize: "1.25rem", fontWeight: 700, marginBottom: "0.35rem" }}>
+                    Healthcare Quality Metrics & Model Governance
+                  </h2>
+                  <p style={{ fontSize: "0.875rem", color: "var(--text-muted)", marginBottom: "1.5rem" }}>
+                    Transparent Scikit-learn evaluation metrics benchmarked against Zero-R baseline classifiers.
+                  </p>
+
+                  {metrics && (
+                    <div className="grid-2" style={{ marginBottom: "1.5rem" }}>
+                      <div className="card" style={{ backgroundColor: "var(--bg-surface)" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem" }}>
+                          <h3 style={{ fontSize: "1rem", fontWeight: 700 }}>Category Classifier (Balanced Logistic Regression)</h3>
+                          <span className="badge badge-low">C=1.5 L2</span>
+                        </div>
+                        <div className="grid-2">
+                          <div>
+                            <div className="stat-label">Model Accuracy</div>
+                            <div className="stat-val" style={{ color: "#38bdf8" }}>
+                              {(metrics.category_model.accuracy * 100).toFixed(1)}%
+                            </div>
+                          </div>
+                          <div>
+                            <div className="stat-label">Weighted F1-Score</div>
+                            <div className="stat-val" style={{ color: "#10b981" }}>
+                              {(metrics.category_model.f1_weighted * 100).toFixed(1)}%
+                            </div>
+                          </div>
+                          <div>
+                            <div className="stat-label">Zero-R Baseline</div>
+                            <div className="stat-val" style={{ color: "var(--text-dim)", fontSize: "1.4rem" }}>
+                              {(metrics.category_model.baseline_accuracy * 100).toFixed(1)}%
+                            </div>
+                          </div>
+                          <div>
+                            <div className="stat-label">Information Gain</div>
+                            <div className="stat-val" style={{ color: "#fcd34d", fontSize: "1.4rem" }}>
+                              +{(metrics.category_model.gain * 100).toFixed(1)}%
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="card" style={{ backgroundColor: "var(--bg-surface)" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem" }}>
+                          <h3 style={{ fontSize: "1rem", fontWeight: 700 }}>Severity Classifier (Lexicon-Augmented)</h3>
+                          <span className="badge badge-low">C=2.0 L2</span>
+                        </div>
+                        <div className="grid-2">
+                          <div>
+                            <div className="stat-label">Model Accuracy</div>
+                            <div className="stat-val" style={{ color: "#38bdf8" }}>
+                              {(metrics.severity_model.accuracy * 100).toFixed(1)}%
+                            </div>
+                          </div>
+                          <div>
+                            <div className="stat-label">Weighted F1-Score</div>
+                            <div className="stat-val" style={{ color: "#10b981" }}>
+                              {(metrics.severity_model.f1_weighted * 100).toFixed(1)}%
+                            </div>
+                          </div>
+                          <div>
+                            <div className="stat-label">Zero-R Baseline</div>
+                            <div className="stat-val" style={{ color: "var(--text-dim)", fontSize: "1.4rem" }}>
+                              {(metrics.severity_model.baseline_accuracy * 100).toFixed(1)}%
+                            </div>
+                          </div>
+                          <div>
+                            <div className="stat-label">Information Gain</div>
+                            <div className="stat-val" style={{ color: "#fcd34d", fontSize: "1.4rem" }}>
+                              +{(metrics.severity_model.gain * 100).toFixed(1)}%
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* 7-Stage Architectural Pipeline Diagram */}
+                  <div style={{ backgroundColor: "var(--bg-surface)", padding: "1.25rem", borderRadius: "0.5rem", border: "1px solid var(--border)" }}>
+                    <h3 style={{ fontSize: "1rem", fontWeight: 700, marginBottom: "0.75rem" }}>
+                      7-Stage End-to-End Clinical Processing Architecture
+                    </h3>
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: "0.75rem", fontSize: "0.8125rem" }}>
+                      <div style={{ padding: "0.75rem", backgroundColor: "var(--bg-card)", borderRadius: "0.375rem", borderTop: "3px solid #0284c7" }}>
+                        <strong>Stage 1: Linguistic NLP</strong>
+                        <p style={{ fontSize: "0.75rem", color: "var(--text-muted)", marginTop: "0.25rem" }}>Gemini 3.1 Flash Lite API + Deterministic Typo Guardrail</p>
+                      </div>
+                      <div style={{ padding: "0.75rem", backgroundColor: "var(--bg-card)", borderRadius: "0.375rem", borderTop: "3px solid #38bdf8" }}>
+                        <strong>Stage 2: Interactive Control</strong>
+                        <p style={{ fontSize: "0.75rem", color: "var(--text-muted)", marginTop: "0.25rem" }}>Standardized Terminology vs. Verbatim Raw Staff Input</p>
+                      </div>
+                      <div style={{ padding: "0.75rem", backgroundColor: "var(--bg-card)", borderRadius: "0.375rem", borderTop: "3px solid #06b6d4" }}>
+                        <strong>Stage 3: Sublinear TF-IDF</strong>
+                        <p style={{ fontSize: "0.75rem", color: "var(--text-muted)", marginTop: "0.25rem" }}>TF = 1 + log(f), L2 Unit Normalization (Sparse 1xD Vector)</p>
+                      </div>
+                      <div style={{ padding: "0.75rem", backgroundColor: "var(--bg-card)", borderRadius: "0.375rem", borderTop: "3px solid #10b981" }}>
+                        <strong>Stage 4: Deterministic ML</strong>
+                        <p style={{ fontSize: "0.75rem", color: "var(--text-muted)", marginTop: "0.25rem" }}>Dual Logistic Regression Models (Category & Severity) &lt;15ms</p>
+                      </div>
+                      <div style={{ padding: "0.75rem", backgroundColor: "var(--bg-card)", borderRadius: "0.375rem", borderTop: "3px solid #fcd34d" }}>
+                        <strong>Stage 5: Safety Guardrails</strong>
+                        <p style={{ fontSize: "0.75rem", color: "var(--text-muted)", marginTop: "0.25rem" }}>Critical Keyword Overrides + Composite Risk Score (0-100)</p>
+                      </div>
+                      <div style={{ padding: "0.75rem", backgroundColor: "var(--bg-card)", borderRadius: "0.375rem", borderTop: "3px solid #f97316" }}>
+                        <strong>Stage 6: RAG Precedents</strong>
+                        <p style={{ fontSize: "0.75rem", color: "var(--text-muted)", marginTop: "0.25rem" }}>Cosine Similarity cos(&theta;) against Ground-Truth Database</p>
+                      </div>
+                      <div style={{ padding: "0.75rem", backgroundColor: "var(--bg-card)", borderRadius: "0.375rem", borderTop: "3px solid #a855f7" }}>
+                        <strong>Stage 7: Regulatory & Dossier</strong>
+                        <p style={{ fontSize: "0.75rem", color: "var(--text-muted)", marginTop: "0.25rem" }}>NABH 5th Ed / WHO Guidelines + Clinical Leadership Dossier</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* TAB 5: EXECUTIVE OVERVIEW */}
+            {activeTab === 'overview' && analytics && (
+              <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+                {/* KPI Cards */}
+                <div className="grid-4">
+                  <div className="card">
+                    <div className="stat-label">Total Logged Incidents</div>
+                    <div className="stat-val">{analytics.total_incidents}</div>
+                    <div style={{ fontSize: "0.75rem", color: "var(--text-dim)", marginTop: "0.5rem" }}>Active Institutional Register</div>
+                  </div>
+                  <div className="card">
+                    <div className="stat-label">High & Critical Incidents</div>
+                    <div className="stat-val" style={{ color: "#f87171" }}>{analytics.high_critical_count}</div>
+                    <div style={{ fontSize: "0.75rem", color: "#f87171", marginTop: "0.5rem" }}>Requires Immediate SWA / CAPA</div>
+                  </div>
+                  <div className="card">
+                    <div className="stat-label">Category Classifier Accuracy</div>
+                    <div className="stat-val" style={{ color: "#38bdf8" }}>
+                      {(analytics.model_health.category_accuracy * 100).toFixed(1)}%
+                    </div>
+                    <div style={{ fontSize: "0.75rem", color: "#38bdf8", marginTop: "0.5rem" }}>Balanced Scikit-Learn Model</div>
+                  </div>
+                  <div className="card">
+                    <div className="stat-label">Reporting Hospital Units</div>
+                    <div className="stat-val">{Object.keys(analytics.departments || {}).length}</div>
+                    <div style={{ fontSize: "0.75rem", color: "var(--text-dim)", marginTop: "0.5rem" }}>Hospital-Wide Coverage</div>
+                  </div>
+                </div>
+
+                {/* Distributions */}
+                <div className="grid-3">
+                  <div className="card">
+                    <h3 style={{ fontSize: "1rem", fontWeight: 700, marginBottom: "1rem" }}>Clinical Incident Severity</h3>
+                    <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+                      {Object.entries(analytics.severities || {}).map(([sev, count]) => (
+                        <div key={sev}>
+                          <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.8125rem", marginBottom: "0.25rem" }}>
+                            <span style={{ textTransform: "capitalize", fontWeight: 600 }}>{sev}</span>
+                            <span>{count} incidents ({Math.round(count / analytics.total_incidents * 100)}%)</span>
+                          </div>
+                          <div className="progress-bar">
+                            <div
+                              className="progress-fill"
+                              style={{
+                                width: `${(count / analytics.total_incidents) * 100}%`,
+                                backgroundColor: sev === 'critical' ? '#ef4444' : (sev === 'high' ? '#f97316' : (sev === 'medium' ? '#0ea5e9' : '#10b981'))
+                              }}
+                            ></div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="card">
+                    <h3 style={{ fontSize: "1rem", fontWeight: 700, marginBottom: "1rem" }}>Healthcare Incident Categories</h3>
+                    <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+                      {Object.entries(analytics.categories || {}).map(([cat, count]) => (
+                        <div key={cat}>
+                          <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.8125rem", marginBottom: "0.25rem" }}>
+                            <span style={{ fontWeight: 600 }}>{cat}</span>
+                            <span>{count}</span>
+                          </div>
+                          <div className="progress-bar">
+                            <div
+                              className="progress-fill"
+                              style={{ width: `${(count / analytics.total_incidents) * 100}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="card">
+                    <h3 style={{ fontSize: "1rem", fontWeight: 700, marginBottom: "1rem" }}>Hospital / Department Breakdown</h3>
+                    <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+                      {Object.entries(analytics.departments || {}).map(([dept, count]) => (
+                        <div key={dept}>
+                          <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.8125rem", marginBottom: "0.25rem" }}>
+                            <span style={{ fontWeight: 600 }}>{dept}</span>
+                            <span>{count}</span>
+                          </div>
+                          <div className="progress-bar">
+                            <div
+                              className="progress-fill"
+                              style={{ width: `${(count / analytics.total_incidents) * 100}%`, backgroundColor: "#a855f7" }}
+                            ></div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </main>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
+</body>
+</html>

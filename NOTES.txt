@@ -1,0 +1,54 @@
+HEALTHCARE PATIENT SAFETY & CLINICAL INCIDENT INTELLIGENCE PLATFORM
+========================================================================
+
+LIBRARIES & DEPENDENCIES
+------------------------------------------------------------------------
+Python 3.10+
+fastapi (RESTful Async Gateway)
+pydantic (Schema & Clinical Input Validation)
+numpy & pandas (High-speed Clinical Array & Tabular Operations)
+scikit-learn (Sublinear TF-IDF, Balanced Logistic Regression, K-Means Clustering, Cosine Similarity)
+urllib.request & json (Lightweight zero-dependency Google Gemini GenAI invocation)
+
+PROCESSING PIPELINE (6-PHASE ARCHITECTURE)
+------------------------------------------------------------------------
+  [INPUT]: Clinical Incident Narrative
+           e.g. "Patient experienced a fall while being transferred from the hospital bed to a wheelchair due to improper transfer assistance."
+     │
+     ▼
+  PHASE 1: NLP Preprocessing & Linguistic Harmonization
+  • Whitespace normalization, character elongation de-duplication, medical abbreviation expansion.
+  • Domain Clinical Hazard Lexicon Injection across 6 core safety vectors.
+  • Sublinear TF-IDF (1, 2) n-gram vectorization with inverse document frequency weighting.
+     │
+     ▼
+  PHASE 2: Deterministic Machine Learning Core
+  • Category Classifier: Balanced Multiclass Logistic Regression (C=1.5).
+    -> Output: Patient Safety
+  • Severity Classifier: Lexicon-Augmented Logistic Regression (C=2.0) with clinical cue tags.
+    -> Output: Medium
+  • Clinical Guardrails: Deterministic overrides for sentinel/critical events (fatal, cardiac arrest, ventilator failure).
+     │
+     ▼
+  PHASE 3: Evidence Retrieval (RAG) & Extractive Summarization
+  • RAG Precedent Search: Cosine Similarity over historical clinical incident embeddings.
+    -> Output: Top-3 Historical Incident Precedents with similarity score (0.000 to 1.000).
+  • Extractive Summarizer: Clinical sentence salience scoring based on key clinical hazard terms.
+     │
+     ▼
+  PHASE 4: Healthcare CAPA Engine & Operational Risk Scoring
+  • NABH 5th Edition & WHO Patient Safety Curriculum Protocol Mapping.
+  • Actionable Corrective & Preventive Actions (CAPA) tailored by Category and Severity.
+  • Composite Operational Risk Score Calculation (0–100 scale).
+     │
+     ▼
+  PHASE 5: Google Gemini GenAI Synthesis
+  • Dual Root Cause Analysis: Technical (biomedical/pharmacological) vs. Organizational (workflow/staffing).
+  • Regulatory & Healthcare Quality Impact: Specific NABH Standard clauses (COP.14, MOM.5, HIC.3, FMS.4, AAC.2) & WHO Global Patient Safety Goals.
+  • Executive Clinical Incident Synthesis for Chief Medical Officer (CMO) and Hospital Quality Committee.
+     │
+     ▼
+  PHASE 6: FastAPI REST API & Enterprise GUI
+  • Complete interactive clinical dashboard with dark/light healthcare theme.
+  • Clinical Incident Analyzer Studio, Patient Safety Incident Register, Clinical Risk Clusters, Healthcare Quality Metrics.
+  • 100% responsive, high-performance, production-ready.
