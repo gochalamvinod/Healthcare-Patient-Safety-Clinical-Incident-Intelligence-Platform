@@ -7,14 +7,31 @@ import os
 import urllib.request
 from pathlib import Path
 from typing import Optional, Any
-from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 BASE_DIR = Path(__file__).resolve().parents[1]
-load_dotenv(BASE_DIR / ".env")
+
+# Pure-Python .env loader (zero external dependency, works on all cloud runtimes)
+def _load_env():
+    env_file = BASE_DIR / ".env"
+    if env_file.exists():
+        try:
+            for line in env_file.read_text(encoding="utf-8").splitlines():
+                if "=" in line and not line.strip().startswith("#"):
+                    k, v = line.strip().split("=", 1)
+                    os.environ.setdefault(k.strip(), v.strip())
+        except Exception:
+            pass
+_load_env()
+
+try:
+    from dotenv import load_dotenv
+    load_dotenv(BASE_DIR / ".env")
+except Exception:
+    pass
 
 from backend.ml_engine import get_pipeline
 
@@ -58,19 +75,19 @@ def _parse_bool(val: Any) -> bool:
     return True
 
 def _get_html(file_path: Path) -> str:
+    if file_path.exists():
+        return file_path.read_text(encoding="utf-8")
+    for alt in [BASE_DIR / "index.html", BASE_DIR / "frontend" / "dist" / "index.html", BASE_DIR / "frontend" / "index.html", FRONTEND_FILE]:
+        if alt.exists():
+            return alt.read_text(encoding="utf-8")
     frontend_url = os.environ.get("FRONTEND_URL")
     if frontend_url:
         try:
             req = urllib.request.Request(frontend_url, headers={"User-Agent": "FastAPI-Healthcare-Gateway"})
-            with urllib.request.urlopen(req, timeout=3) as res:
+            with urllib.request.urlopen(req, timeout=2) as res:
                 return res.read().decode("utf-8")
         except Exception:
             pass
-    if file_path.exists():
-        return file_path.read_text(encoding="utf-8")
-    for alt in [BASE_DIR / "frontend" / "dist" / "index.html", BASE_DIR / "index.html", FRONTEND_FILE]:
-        if alt.exists():
-            return alt.read_text(encoding="utf-8")
     return "<html><body><h2>Healthcare Patient Safety & Clinical Incident Intelligence Platform</h2></body></html>"
 
 # 1. Web Interface Routes (Vercel & Local Native Support)
